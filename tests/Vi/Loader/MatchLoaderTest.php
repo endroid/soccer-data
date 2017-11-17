@@ -15,13 +15,18 @@ use Endroid\SoccerData\Vi\Loader\CompetitionLoader;
 use Endroid\SoccerData\Vi\Loader\MatchLoader;
 use Endroid\SoccerData\Vi\Loader\TeamLoader;
 use Goutte\Client as GoutteClient;
+use GuzzleHttp\Client as GuzzleClient;
 use PHPUnit\Framework\TestCase;
 
 class MatchLoaderTest extends TestCase
 {
     public function testLoadByTeam()
     {
-        $client = new Client(new GoutteClient());
+        $goutteClient = new GoutteClient();
+        $guzzleClient = new GuzzleClient(['timeout' => 90, 'verify' => false]);
+        $goutteClient->setClient($guzzleClient);
+
+        $client = new Client($goutteClient);
         $competitionLoader = new CompetitionLoader($client);
         $competition = $competitionLoader->loadByName('Eredivisie');
 
