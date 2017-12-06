@@ -15,5 +15,6 @@ use Endroid\SoccerData\Entity\Team;
 interface TeamLoaderInterface
 {
     public function loadByName(string $name): Team;
+
     public function loadByCompetition(Competition $competition): array;
 }

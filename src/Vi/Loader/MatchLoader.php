@@ -69,7 +69,7 @@ final class MatchLoader implements MatchLoaderInterface
                 $timeString = '00:00';
             }
 
-            $date = DateTime::createFromFormat('D j M H:i', $dateString . ' ' . $timeString, new DateTimeZone('Europe/Amsterdam'));
+            $date = DateTime::createFromFormat('D j M H:i', $dateString.' '.$timeString, new DateTimeZone('Europe/Amsterdam'));
 
             $teamHome = $this->teamLoader->loadByName(trim($node->filter('.c-fixture__team-name--home')->text()));
             $teamAway = $this->teamLoader->loadByName(trim($node->filter('.c-fixture__team-name--away')->text()));
