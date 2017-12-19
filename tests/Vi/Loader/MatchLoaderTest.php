@@ -31,7 +31,7 @@ class MatchLoaderTest extends TestCase
         $competition = $competitionLoader->loadByName('Eredivisie');
 
         $this->assertTrue($competition instanceof Competition);
-        $this->assertTrue($competition->getName() === 'Eredivisie');
+        $this->assertTrue('Eredivisie' === $competition->getName());
 
         $teamLoader = new TeamLoader($client);
         $teams = $teamLoader->loadByCompetition($competition);

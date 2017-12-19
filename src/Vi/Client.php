@@ -32,7 +32,7 @@ final class Client
 
     public function ensureAbsoluteUrl(string $url): string
     {
-        if (strpos($url, '/') === 0) {
+        if (0 === strpos($url, '/')) {
             $url = 'https://www.vi.nl'.$url;
         }
 

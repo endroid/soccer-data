@@ -30,7 +30,7 @@ final class CompetitionLoader implements CompetitionLoaderInterface
         $crawler = $this->client->getCrawler($url);
         $link = $crawler->selectLink($name);
 
-        if ($link->count() === 0) {
+        if (0 === $link->count()) {
             throw new CompetitionNotFoundException(sprintf('Competition with name "%s" not found', $name));
         }
 

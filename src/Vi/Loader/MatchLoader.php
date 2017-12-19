@@ -65,7 +65,7 @@ final class MatchLoader implements MatchLoaderInterface
             $dateString = strtr($node->filter('h3')->html(), $this->days + $this->months);
             $timeString = trim($node->filter('.c-fixture__status')->text());
 
-            if (strpos($timeString, ':') === false) {
+            if (false === strpos($timeString, ':')) {
                 $timeString = '00:00';
             }
 
@@ -75,12 +75,12 @@ final class MatchLoader implements MatchLoaderInterface
             $teamAway = $this->teamLoader->loadByName(trim($node->filter('.c-fixture__team-name--away')->text()));
 
             $scoreHome = trim($node->filter('.c-fixture__score--home')->text());
-            if ($scoreHome === '-') {
+            if ('-' === $scoreHome) {
                 $scoreHome = null;
             }
 
             $scoreAway = trim($node->filter('.c-fixture__score--away')->text());
-            if ($scoreAway === '-') {
+            if ('-' === $scoreAway) {
                 $scoreAway = null;
             }
 
