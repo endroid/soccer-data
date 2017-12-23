@@ -34,4 +34,29 @@ class Match
     {
         return $this->id;
     }
+
+    public function getTeamHome(): Team
+    {
+        return $this->teamHome;
+    }
+
+    public function getTeamAway(): Team
+    {
+        return $this->teamAway;
+    }
+
+    public function getDate(): DateTime
+    {
+        return $this->date;
+    }
+
+    public function getScoreHome(): ?int
+    {
+        return $this->scoreHome;
+    }
+
+    public function getScoreAway(): ?int
+    {
+        return $this->scoreAway;
+    }
 }

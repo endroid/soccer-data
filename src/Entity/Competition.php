@@ -13,13 +13,13 @@ class Competition
 {
     private $id;
     private $name;
-    private $teams;
+    private $teamsByName;
 
     public function __construct(string $id, string $name)
     {
         $this->id = $id;
         $this->name = $name;
-        $this->teams = [];
+        $this->teamsByName = [];
     }
 
     public function getId(): string
@@ -32,13 +32,18 @@ class Competition
         return $this->name;
     }
 
+    public function getTeamByName(string $name): Team
+    {
+        return $this->teamsByName[$name];
+    }
+
     public function getTeams(): array
     {
-        return $this->teams;
+        return $this->teamsByName;
     }
 
     public function addTeam(Team $team): void
     {
-        $this->teams[] = $team;
+        $this->teamsByName[$team->getName()] = $team;
     }
 }
