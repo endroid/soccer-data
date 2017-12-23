@@ -13,6 +13,7 @@ use Endroid\SoccerData\Entity\Competition;
 use Endroid\SoccerData\Exception\CompetitionNotFoundException;
 use Endroid\SoccerData\Loader\CompetitionLoaderInterface;
 use Endroid\SoccerData\Vi\Client;
+use Symfony\Component\DomCrawler\Crawler;
 
 final class CompetitionLoader implements CompetitionLoaderInterface
 {
@@ -27,7 +28,8 @@ final class CompetitionLoader implements CompetitionLoaderInterface
     {
         $url = 'https://www.vi.nl/competities';
 
-        $crawler = $this->client->getCrawler($url);
+        $contents = $this->client->loadContents($url);
+        $crawler = new Crawler($contents);
         $link = $crawler->selectLink($name);
 
         if (0 === $link->count()) {

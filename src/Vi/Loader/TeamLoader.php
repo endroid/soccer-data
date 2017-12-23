@@ -37,7 +37,8 @@ final class TeamLoader implements TeamLoaderInterface
 
     public function loadByCompetition(Competition $competition): array
     {
-        $crawler = $this->client->getCrawler($competition->getId());
+        $contents = $this->client->loadContents($competition->getId());
+        $crawler = new Crawler($contents);
         $crawler->filter('.c-stats-table__body .o-table__row')->each(function (Crawler $node) use ($competition) {
             $name = $node->filter('.o-table__cell:nth-child(3)')->text();
             $url = $this->client->ensureAbsoluteUrl($node->attr('href'));

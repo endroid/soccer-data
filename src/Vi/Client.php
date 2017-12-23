@@ -9,25 +9,27 @@
 
 namespace Endroid\SoccerData\Vi;
 
-use Goutte\Client as GoutteClient;
-use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\DomCrawler\Crawler;
+use GuzzleHttp\Psr7\Request;
+use Http\Client\Common\Plugin\CookiePlugin;
+use Http\Client\Common\PluginClient;
+use Http\Discovery\HttpClientDiscovery;
+use Http\Message\Cookie;
+use Http\Message\CookieJar;
 
 final class Client
 {
-    private $client;
-
-    public function __construct(GoutteClient $client)
+    public function loadContents(string $url): string
     {
-        $this->client = $client;
-    }
+        $cookieJar = new CookieJar();
+        $cookieJar->addCookie(new Cookie('BCPermissionLevel', 'PERSONAL'));
+        $cookiePlugin = new CookiePlugin($cookieJar);
 
-    public function getCrawler(string $url): Crawler
-    {
-        $this->client->followRedirects(false);
-        $this->client->getCookieJar()->set(new Cookie('BCPermissionLevel', 'PERSONAL'));
+        $httpClient = new PluginClient(HttpClientDiscovery::find(), [$cookiePlugin]);
 
-        return $this->client->request('GET', $url);
+        $request = new Request('GET', $url);
+        $response = $httpClient->sendRequest($request);
+
+        return $response->getBody()->getContents();
     }
 
     public function ensureAbsoluteUrl(string $url): string

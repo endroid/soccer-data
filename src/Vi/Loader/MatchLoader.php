@@ -58,7 +58,8 @@ final class MatchLoader implements MatchLoaderInterface
 
     public function loadByTeam(Team $team): array
     {
-        $crawler = $this->client->getCrawler($team->getId());
+        $contents = $this->client->loadContents($team->getId());
+        $crawler = new Crawler($contents);
         $crawler->filter('.c-match-overview')->each(function (Crawler $node) use ($team) {
             $id = $this->client->ensureAbsoluteUrl($node->filter('.c-match-overview__link')->attr('href'));
 
