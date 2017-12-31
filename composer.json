@@ -2,7 +2,7 @@
     "name": "endroid/soccer-data",
     "description": "Endroid Soccer Data",
     "keywords": ["endroid", "soccer", "data"],
-    "homepage": "https://github.com/endroid/SoccerData",
+    "homepage": "https://github.com/endroid/soccer-data",
     "type": "library",
     "license": "MIT",
     "authors": [
