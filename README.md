@@ -1,4 +1,4 @@
 Soccer Data
 ===========
 
-*By [endroid](http://endroid.nl/)*
+*By [endroid](https://endroid.nl/)*
