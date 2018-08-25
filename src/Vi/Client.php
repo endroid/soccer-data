@@ -11,6 +11,7 @@ namespace Endroid\SoccerData\Vi;
 
 use GuzzleHttp\Psr7\Request;
 use Http\Client\Common\Plugin\CookiePlugin;
+use Http\Client\Common\Plugin\RedirectPlugin;
 use Http\Client\Common\PluginClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Message\Cookie;
@@ -22,10 +23,10 @@ final class Client
     {
         $cookieJar = new CookieJar();
         $cookieJar->addCookie(new Cookie('BCPermissionLevel', 'PERSONAL'));
+        $cookieJar->addCookie(new Cookie('BC_GDPR', '11111'));
         $cookiePlugin = new CookiePlugin($cookieJar);
 
-        $httpClient = new PluginClient(HttpClientDiscovery::find(), [$cookiePlugin]);
-
+        $httpClient = new PluginClient(HttpClientDiscovery::find(), [$cookiePlugin, new RedirectPlugin()]);
         $request = new Request('GET', $url);
         $response = $httpClient->sendRequest($request);
 
