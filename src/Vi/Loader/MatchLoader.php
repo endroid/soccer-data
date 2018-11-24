@@ -87,7 +87,7 @@ final class MatchLoader implements MatchLoaderInterface
                 $scoreAway = null;
             }
 
-            $match = new Match($id, $date, $teamHome, $teamAway, $scoreHome, $scoreAway);
+            $match = new Match($id, $date, $teamHome, $teamAway, intval($scoreHome), intval($scoreAway));
 
             $this->addMatch($match);
             $team->addMatch($match);
