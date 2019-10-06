@@ -24,8 +24,9 @@ final class Client
     public function loadContents(string $url): string
     {
         $cookieJar = new CookieJar();
-        $cookieJar->addCookie(new Cookie('BCPermissionLevel', 'PERSONAL'));
-        $cookieJar->addCookie(new Cookie('BC_GDPR', '11111'));
+        $cookieJar->addCookie(new Cookie('googlepersonalization', 'OnaDYWOnj55bgA'));
+        $cookieJar->addCookie(new Cookie('eupubconsent', 'BOnaDYWOnj55bAKAZAENAAAAwAAAAA'));
+        $cookieJar->addCookie(new Cookie('euconsent', 'BOnaDYXOnj55bAKAZBENCn-AAAAqx7_______9______9uz_Ov_v_f__33e8__9v_l_7_-___u_-3zd4u_1vf99yfm1-7etr3tp_87ues2_Xur__79__3z3_9phP78k89r7337Ew-v-3o8AA'));
         $cookiePlugin = new CookiePlugin($cookieJar);
 
         $httpClient = new PluginClient(HttpClientDiscovery::find(), [$cookiePlugin, new RedirectPlugin()]);
