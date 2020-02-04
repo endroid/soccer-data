@@ -38,7 +38,7 @@ final class CompetitionLoader implements CompetitionLoaderInterface
             throw new CompetitionNotFoundException(sprintf('Competition with name "%s" not found', $name));
         }
 
-        $id = $this->client->ensureAbsoluteUrl($link->attr('href'));
+        $id = $this->client->ensureAbsoluteUrl(strval($link->attr('href')));
         $name = $link->text();
 
         $competition = new Competition($id, $name);

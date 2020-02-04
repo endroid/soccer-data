@@ -49,6 +49,8 @@ final class MatchLoader implements MatchLoaderInterface
 
     private $client;
     private $teamLoader;
+
+    /** @var Match[] */
     private $matchesById;
 
     public function __construct(Client $client, TeamLoaderInterface $teamLoader)
@@ -63,7 +65,7 @@ final class MatchLoader implements MatchLoaderInterface
         $contents = $this->client->loadContents($team->getId());
         $crawler = new Crawler($contents);
         $crawler->filter('.c-match-overview')->each(function (Crawler $node) use ($team) {
-            $id = $this->client->ensureAbsoluteUrl($node->filter('.c-match-overview__link')->attr('href'));
+            $id = $this->client->ensureAbsoluteUrl(strval($node->filter('.c-match-overview__link')->attr('href')));
 
             $dateString = strtr($node->filter('h3')->html(), $this->days + $this->months);
             $timeString = trim($node->filter('.c-fixture__status')->text());
@@ -73,6 +75,10 @@ final class MatchLoader implements MatchLoaderInterface
             }
 
             $date = DateTime::createFromFormat('D j M H:i', $dateString.' '.$timeString, new DateTimeZone('Europe/Amsterdam'));
+
+            if (!$date instanceof \DateTime) {
+                throw new \Exception('Invalid match date');
+            }
 
             $teamHome = $this->teamLoader->loadByName(trim($node->filter('.c-fixture__team-name--home')->text()));
             $teamAway = $this->teamLoader->loadByName(trim($node->filter('.c-fixture__team-name--away')->text()));

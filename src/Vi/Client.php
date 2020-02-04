@@ -11,29 +11,24 @@ declare(strict_types=1);
 
 namespace Endroid\SoccerData\Vi;
 
-use GuzzleHttp\Psr7\Request;
-use Http\Client\Common\Plugin\CookiePlugin;
-use Http\Client\Common\Plugin\RedirectPlugin;
-use Http\Client\Common\PluginClient;
-use Http\Discovery\HttpClientDiscovery;
-use Http\Message\Cookie;
-use Http\Message\CookieJar;
+use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\BrowserKit\CookieJar;
+use Symfony\Component\BrowserKit\HttpBrowser;
+use Symfony\Component\HttpClient\HttpClient;
 
 final class Client
 {
     public function loadContents(string $url): string
     {
         $cookieJar = new CookieJar();
-        $cookieJar->addCookie(new Cookie('googlepersonalization', 'OnaDYWOnj55bgA'));
-        $cookieJar->addCookie(new Cookie('eupubconsent', 'BOnaDYWOnj55bAKAZAENAAAAwAAAAA'));
-        $cookieJar->addCookie(new Cookie('euconsent', 'BOnaDYXOnj55bAKAZBENCn-AAAAqx7_______9______9uz_Ov_v_f__33e8__9v_l_7_-___u_-3zd4u_1vf99yfm1-7etr3tp_87ues2_Xur__79__3z3_9phP78k89r7337Ew-v-3o8AA'));
-        $cookiePlugin = new CookiePlugin($cookieJar);
+        $cookieJar->set(new Cookie('googlepersonalization', 'OnaDYWOnj55bgA'));
+        $cookieJar->set(new Cookie('eupubconsent', 'BOnaDYWOnj55bAKAZAENAAAAwAAAAA'));
+        $cookieJar->set(new Cookie('euconsent', 'BOnaDYXOnj55bAKAZBENCn-AAAAqx7_______9______9uz_Ov_v_f__33e8__9v_l_7_-___u_-3zd4u_1vf99yfm1-7etr3tp_87ues2_Xur__79__3z3_9phP78k89r7337Ew-v-3o8AA'));
 
-        $httpClient = new PluginClient(HttpClientDiscovery::find(), [$cookiePlugin, new RedirectPlugin()]);
-        $request = new Request('GET', $url);
-        $response = $httpClient->sendRequest($request);
+        $client = new HttpBrowser(HttpClient::create(), null, $cookieJar);
+        $crawler = $client->request('GET', $url);
 
-        return $response->getBody()->getContents();
+        return $crawler->html();
     }
 
     public function ensureAbsoluteUrl(string $url): string

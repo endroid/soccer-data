@@ -20,6 +20,8 @@ use Symfony\Component\DomCrawler\Crawler;
 final class TeamLoader implements TeamLoaderInterface
 {
     private $client;
+
+    /** @var Team[] */
     private $teamsByName;
 
     public function __construct(Client $client)
@@ -43,7 +45,7 @@ final class TeamLoader implements TeamLoaderInterface
         $crawler = new Crawler($contents);
         $crawler->filter('.c-stats-table__body .o-table__row')->each(function (Crawler $node) use ($competition) {
             $name = $node->filter('.o-table__cell:nth-child(3)')->text();
-            $url = $this->client->ensureAbsoluteUrl($node->attr('href'));
+            $url = $this->client->ensureAbsoluteUrl(strval($node->attr('href')));
             $team = new Team($url, $name);
             $this->addTeam($team);
             $competition->addTeam($team);

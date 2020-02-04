@@ -15,6 +15,8 @@ class Team
 {
     private $id;
     private $name;
+
+    /** @var Match[] */
     private $matches;
 
     public function __construct(string $id, string $name)

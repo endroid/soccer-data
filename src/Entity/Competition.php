@@ -15,6 +15,8 @@ class Competition
 {
     private $id;
     private $name;
+
+    /** @var array<string, Team> */
     private $teamsByName;
 
     public function __construct(string $id, string $name)
