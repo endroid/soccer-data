@@ -13,13 +13,16 @@
     ],
     "require": {
         "php": ">=7.2",
-        "endroid/installer": "^1.0.3",
-        "symfony/browser-kit": "^4.3||^5.0",
-        "symfony/css-selector": "^3.4||^4.1||^5.0",
-        "symfony/http-client": "^4.1||^5.0"
+        "symfony/browser-kit": "^4.4||^5.0",
+        "symfony/css-selector": "^3.4||^4.4||^5.0",
+        "symfony/http-client": "^4.4||^5.0"
     },
     "require-dev": {
-        "endroid/test": "dev-master"
+        "endroid/quality": "dev-master"
+    },
+    "suggest": {
+        "roave/security-advisories": "Avoids installation of package versions with vulnerabilities",
+        "symfony/security-checker": "Checks your composer.lock for vulnerabilities"
     },
     "autoload": {
         "psr-4": {
