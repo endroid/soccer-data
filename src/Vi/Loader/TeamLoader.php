@@ -39,6 +39,7 @@ final class TeamLoader implements TeamLoaderInterface
         return new Team('ID', 'Team name');
     }
 
+    /** @return array<Team> */
     public function loadByCompetition(Competition $competition): array
     {
         $contents = $this->client->loadContents($competition->getId());

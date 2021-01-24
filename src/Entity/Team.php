@@ -16,14 +16,14 @@ class Team
     private $id;
     private $name;
 
-    /** @var Match[] */
-    private $matches;
+    /** @var array<Game> */
+    private $games;
 
     public function __construct(string $id, string $name)
     {
         $this->id = $id;
         $this->name = $name;
-        $this->matches = [];
+        $this->games = [];
     }
 
     public function getId(): string
@@ -36,13 +36,14 @@ class Team
         return $this->name;
     }
 
-    public function getMatches(): array
+    /** @return array<Game> */
+    public function getGames(): array
     {
-        return $this->matches;
+        return $this->games;
     }
 
-    public function addMatch(Match $match): void
+    public function addGame(Game $game): void
     {
-        $this->matches[] = $match;
+        $this->games[] = $game;
     }
 }

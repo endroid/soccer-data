@@ -11,17 +11,17 @@ declare(strict_types=1);
 
 namespace Endroid\SoccerData\Vi\Loader;
 
-use DateTime;
 use DateTimeZone;
-use Endroid\SoccerData\Entity\Match;
+use Endroid\SoccerData\Entity\Game;
 use Endroid\SoccerData\Entity\Team;
-use Endroid\SoccerData\Loader\MatchLoaderInterface;
+use Endroid\SoccerData\Loader\GameLoaderInterface;
 use Endroid\SoccerData\Loader\TeamLoaderInterface;
 use Endroid\SoccerData\Vi\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
-final class MatchLoader implements MatchLoaderInterface
+final class GameLoader implements GameLoaderInterface
 {
+    /** @var array<string, string> */
     private $days = [
         'Za' => 'sat',
         'Zo' => 'Sun',
@@ -32,6 +32,7 @@ final class MatchLoader implements MatchLoaderInterface
         'Vr' => 'Fri',
     ];
 
+    /** @var array<string, string> */
     private $months = [
         'jan' => 'jan',
         'feb' => 'feb',
@@ -50,16 +51,17 @@ final class MatchLoader implements MatchLoaderInterface
     private $client;
     private $teamLoader;
 
-    /** @var Match[] */
-    private $matchesById;
+    /** @var array<Game> */
+    private $gamesById;
 
     public function __construct(Client $client, TeamLoaderInterface $teamLoader)
     {
         $this->client = $client;
         $this->teamLoader = $teamLoader;
-        $this->matchesById = [];
+        $this->gamesById = [];
     }
 
+    /** @return array<Game> */
     public function loadByTeam(Team $team): array
     {
         $contents = $this->client->loadContents($team->getId());
@@ -74,10 +76,10 @@ final class MatchLoader implements MatchLoaderInterface
                 $timeString = '00:00';
             }
 
-            $date = DateTime::createFromFormat('D j M H:i', $dateString.' '.$timeString, new DateTimeZone('Europe/Amsterdam'));
+            $date = \DateTimeImmutable::createFromFormat('D j M H:i', trim($dateString, '.').' '.$timeString, new DateTimeZone('Europe/Amsterdam'));
 
-            if (!$date instanceof \DateTime) {
-                throw new \Exception('Invalid match date');
+            if (!$date instanceof \DateTimeImmutable) {
+                throw new \Exception('Invalid game date');
             }
 
             $teamHome = $this->teamLoader->loadByName(trim($node->filter('.c-fixture__team-name--home')->text()));
@@ -93,17 +95,17 @@ final class MatchLoader implements MatchLoaderInterface
                 $scoreAway = null;
             }
 
-            $match = new Match($id, $date, $teamHome, $teamAway, intval($scoreHome), intval($scoreAway));
+            $game = new Game($id, $date, $teamHome, $teamAway, intval($scoreHome), intval($scoreAway));
 
-            $this->addMatch($match);
-            $team->addMatch($match);
+            $this->addGame($game);
+            $team->addGame($game);
         });
 
-        return $team->getMatches();
+        return $team->getGames();
     }
 
-    private function addMatch(Match $match): void
+    private function addGame(Game $game): void
     {
-        $this->matchesById[$match->getId()] = $match;
+        $this->gamesById[$game->getId()] = $game;
     }
 }

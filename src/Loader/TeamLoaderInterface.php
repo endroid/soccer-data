@@ -18,5 +18,6 @@ interface TeamLoaderInterface
 {
     public function loadByName(string $name): Team;
 
+    /** @return array<Team> */
     public function loadByCompetition(Competition $competition): array;
 }

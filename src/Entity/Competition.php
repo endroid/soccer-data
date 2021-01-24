@@ -41,6 +41,7 @@ class Competition
         return $this->teamsByName[$name];
     }
 
+    /** @return array<Team> */
     public function getTeams(): array
     {
         return $this->teamsByName;

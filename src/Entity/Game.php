@@ -11,9 +11,7 @@ declare(strict_types=1);
 
 namespace Endroid\SoccerData\Entity;
 
-use DateTime;
-
-class Match
+class Game
 {
     private $id;
     private $teamHome;
@@ -22,7 +20,7 @@ class Match
     private $scoreHome;
     private $scoreAway;
 
-    public function __construct(string $id, DateTime $date, Team $teamHome, Team $teamAway, int $scoreHome = null, int $scoreAway = null)
+    public function __construct(string $id, \DateTimeImmutable $date, Team $teamHome, Team $teamAway, int $scoreHome = null, int $scoreAway = null)
     {
         $this->id = $id;
         $this->date = $date;
@@ -47,7 +45,7 @@ class Match
         return $this->teamAway;
     }
 
-    public function getDate(): DateTime
+    public function getDate(): \DateTimeImmutable
     {
         return $this->date;
     }

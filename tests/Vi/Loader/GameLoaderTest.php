@@ -14,11 +14,11 @@ namespace Endroid\SoccerData\Tests\Vi\Loader;
 use Endroid\SoccerData\Entity\Competition;
 use Endroid\SoccerData\Vi\Client;
 use Endroid\SoccerData\Vi\Loader\CompetitionLoader;
-use Endroid\SoccerData\Vi\Loader\MatchLoader;
+use Endroid\SoccerData\Vi\Loader\GameLoader;
 use Endroid\SoccerData\Vi\Loader\TeamLoader;
 use PHPUnit\Framework\TestCase;
 
-class MatchLoaderTest extends TestCase
+class GameLoaderTest extends TestCase
 {
     public function testLoadByTeam()
     {
@@ -34,9 +34,9 @@ class MatchLoaderTest extends TestCase
 
         $this->assertGreaterThan(1, count($teams));
 
-        $matchLoader = new MatchLoader($client, $teamLoader);
-        $matches = $matchLoader->loadByTeam(current($teams));
+        $gameLoader = new GameLoader($client, $teamLoader);
+        $games = $gameLoader->loadByTeam(current($teams));
 
-        $this->assertGreaterThan(1, count($matches));
+        $this->assertGreaterThan(1, count($games));
     }
 }

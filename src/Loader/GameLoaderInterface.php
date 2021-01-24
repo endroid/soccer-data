@@ -11,9 +11,11 @@ declare(strict_types=1);
 
 namespace Endroid\SoccerData\Loader;
 
+use Endroid\SoccerData\Entity\Game;
 use Endroid\SoccerData\Entity\Team;
 
-interface MatchLoaderInterface
+interface GameLoaderInterface
 {
+    /** @return array<Game> */
     public function loadByTeam(Team $team): array;
 }
