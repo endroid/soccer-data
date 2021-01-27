@@ -45,6 +45,11 @@ class Game
         return $this->teamAway;
     }
 
+    public function getTitle(): string
+    {
+        return $this->getTeamHome()->getName().' - '.$this->getTeamAway()->getName();
+    }
+
     public function getDate(): \DateTimeImmutable
     {
         return $this->date;
