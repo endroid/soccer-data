@@ -50,6 +50,17 @@ class Game
         return $this->date;
     }
 
+    public function getDateEnd(): \DateTimeImmutable
+    {
+        // When the exact time is not known return the day
+        if ('00:00' === $this->date->format('H:i')) {
+            return $this->date->add(new \DateInterval('P1D'));
+        }
+
+        // When the exact time is known return +105 minutes
+        return $this->date->add(new \DateInterval('PT105M'));
+    }
+
     public function getScoreHome(): ?int
     {
         return $this->scoreHome;
