@@ -13,9 +13,9 @@
     ],
     "require": {
         "php": "^7.3||^8.0",
-        "symfony/browser-kit": "^3.4||^4.4||^5.0",
+        "ext-curl": "*",
         "symfony/css-selector": "^3.4||^4.4||^5.0",
-        "symfony/http-client": "^3.4||^4.4.11||^5.0"
+        "symfony/dom-crawler": "^3.4.44||^4.4||^5.0"
     },
     "require-dev": {
         "endroid/quality": "dev-master"

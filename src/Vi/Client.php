@@ -11,24 +11,32 @@ declare(strict_types=1);
 
 namespace Endroid\SoccerData\Vi;
 
-use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\BrowserKit\CookieJar;
-use Symfony\Component\BrowserKit\HttpBrowser;
-use Symfony\Component\HttpClient\HttpClient;
-
 final class Client
 {
     public function loadContents(string $url): string
     {
-        $cookieJar = new CookieJar();
-        $cookieJar->set(new Cookie('googlepersonalization', 'OnaDYWOnj55bgA'));
-        $cookieJar->set(new Cookie('eupubconsent', 'BOnaDYWOnj55bAKAZAENAAAAwAAAAA'));
-        $cookieJar->set(new Cookie('euconsent', 'BOnaDYXOnj55bAKAZBENCn-AAAAqx7_______9______9uz_Ov_v_f__33e8__9v_l_7_-___u_-3zd4u_1vf99yfm1-7etr3tp_87ues2_Xur__79__3z3_9phP78k89r7337Ew-v-3o8AA'));
+        $handle = curl_init($url);
 
-        $client = new HttpBrowser(HttpClient::create(), null, $cookieJar);
-        $crawler = $client->request('GET', $url);
+        if (!$handle) {
+            throw new \Exception('Could not initialize cURL');
+        }
 
-        return $crawler->html();
+        $cookies = [
+            'googlepersonalization=OnaDYWOnj55bgA',
+            'eupubconsent=BOnaDYWOnj55bAKAZAENAAAAwAAAAA',
+            'euconsent=BOnaDYXOnj55bAKAZBENCn-AAAAqx7_______9______9uz_Ov_v_f__33e8__9v_l_7_-___u_-3zd4u_1vf99yfm1-7etr3tp_87ues2_Xur__79__3z3_9phP78k89r7337Ew-v-3o8AA',
+        ];
+
+        curl_setopt($handle, CURLOPT_COOKIE, implode('; ', $cookies));
+        curl_setopt($handle, CURLOPT_RETURNTRANSFER, 1);
+        $contents = curl_exec($handle);
+        curl_close($handle);
+
+        if (!is_string($contents)) {
+            throw new \Exception('Could not load data from URL');
+        }
+
+        return $contents;
     }
 
     public function ensureAbsoluteUrl(string $url): string
