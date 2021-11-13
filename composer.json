@@ -12,10 +12,10 @@
         }
     ],
     "require": {
-        "php": "^7.3||^8.0",
+        "php": "^7.4||^8.0",
         "ext-curl": "*",
-        "symfony/css-selector": "^3.4||^4.4||^5.0",
-        "symfony/dom-crawler": "^3.4.44||^4.4||^5.0"
+        "symfony/css-selector": "^4.4||^5.0||^6.0",
+        "symfony/dom-crawler": "^4.4||^5.0||^6.0"
     },
     "require-dev": {
         "endroid/quality": "dev-master"
