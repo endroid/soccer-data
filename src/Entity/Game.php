@@ -2,32 +2,17 @@
 
 declare(strict_types=1);
 
-/*
- * (c) Jeroen van den Enden <info@endroid.nl>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
-
 namespace Endroid\SoccerData\Entity;
 
 class Game
 {
-    private $id;
-    private $teamHome;
-    private $teamAway;
-    private $date;
-    private $scoreHome;
-    private $scoreAway;
-
-    public function __construct(string $id, \DateTimeImmutable $date, Team $teamHome, Team $teamAway, int $scoreHome = null, int $scoreAway = null)
-    {
-        $this->id = $id;
-        $this->date = $date;
-        $this->teamHome = $teamHome;
-        $this->teamAway = $teamAway;
-        $this->scoreHome = $scoreHome;
-        $this->scoreAway = $scoreAway;
+    public function __construct(
+        private readonly string $id,
+        private readonly \DateTimeImmutable $date,
+        private readonly Team $teamHome,
+        private readonly Team $teamAway,
+        private readonly Score|null $score
+    ) {
     }
 
     public function getId(): string
@@ -66,13 +51,8 @@ class Game
         return $this->date->add(new \DateInterval('PT105M'));
     }
 
-    public function getScoreHome(): ?int
+    public function getScore(): Score|null
     {
-        return $this->scoreHome;
-    }
-
-    public function getScoreAway(): ?int
-    {
-        return $this->scoreAway;
+        return $this->score;
     }
 }

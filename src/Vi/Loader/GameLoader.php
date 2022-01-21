@@ -13,6 +13,7 @@ namespace Endroid\SoccerData\Vi\Loader;
 
 use DateTimeZone;
 use Endroid\SoccerData\Entity\Game;
+use Endroid\SoccerData\Entity\Score;
 use Endroid\SoccerData\Entity\Team;
 use Endroid\SoccerData\Loader\GameLoaderInterface;
 use Endroid\SoccerData\Loader\TeamLoaderInterface;
@@ -85,17 +86,14 @@ final class GameLoader implements GameLoaderInterface
             $teamHome = $this->teamLoader->loadByName(trim($node->filter('.c-fixture__team-name--home')->text()));
             $teamAway = $this->teamLoader->loadByName(trim($node->filter('.c-fixture__team-name--away')->text()));
 
-            $scoreHome = trim($node->filter('.c-fixture__score--home')->text());
-            if ('-' === $scoreHome) {
-                $scoreHome = null;
+            $score = null;
+            $scoreHomeNode = $node->filter('.c-fixture__score--home');
+            $scoreAwayNode = $node->filter('.c-fixture__score--away');
+            if (1 === $scoreHomeNode->count() && 1 === $scoreAwayNode->count()) {
+                $score = new Score(intval(trim($scoreHomeNode->text())), intval(trim($scoreAwayNode->text())));
             }
 
-            $scoreAway = trim($node->filter('.c-fixture__score--away')->text());
-            if ('-' === $scoreAway) {
-                $scoreAway = null;
-            }
-
-            $game = new Game($id, $date, $teamHome, $teamAway, intval($scoreHome), intval($scoreAway));
+            $game = new Game($id, $date, $teamHome, $teamAway, $score);
 
             $this->addGame($game);
             $team->addGame($game);
