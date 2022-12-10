@@ -2,32 +2,22 @@
 
 declare(strict_types=1);
 
-/*
- * (c) Jeroen van den Enden <info@endroid.nl>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
-
 namespace Endroid\SoccerData\Vi\Loader;
 
-use Endroid\SoccerData\Entity\Competition;
-use Endroid\SoccerData\Entity\Team;
 use Endroid\SoccerData\Loader\TeamLoaderInterface;
+use Endroid\SoccerData\Model\Competition;
+use Endroid\SoccerData\Model\Team;
 use Endroid\SoccerData\Vi\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
 final class TeamLoader implements TeamLoaderInterface
 {
-    private $client;
+    /** @var array<Team> */
+    private array $teamsByName = [];
 
-    /** @var Team[] */
-    private $teamsByName;
-
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
-        $this->teamsByName = [];
+    public function __construct(
+        private Client $client
+    ) {
     }
 
     public function loadByName(string $name): Team
@@ -42,7 +32,7 @@ final class TeamLoader implements TeamLoaderInterface
     /** @return array<Team> */
     public function loadByCompetition(Competition $competition): array
     {
-        $contents = $this->client->loadContents($competition->getId());
+        $contents = $this->client->loadContents($competition->id);
         $crawler = new Crawler($contents);
         $crawler->filter('.c-stats-table__body .o-table__row')->each(function (Crawler $node) use ($competition) {
             $name = $node->filter('.o-table__cell:nth-child(3)')->text();
@@ -57,6 +47,6 @@ final class TeamLoader implements TeamLoaderInterface
 
     private function addTeam(Team $team): void
     {
-        $this->teamsByName[$team->getName()] = $team;
+        $this->teamsByName[$team->name] = $team;
     }
 }

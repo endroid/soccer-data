@@ -2,28 +2,20 @@
 
 declare(strict_types=1);
 
-/*
- * (c) Jeroen van den Enden <info@endroid.nl>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
-
 namespace Endroid\SoccerData\Vi\Loader;
 
-use DateTimeZone;
-use Endroid\SoccerData\Entity\Game;
-use Endroid\SoccerData\Entity\Score;
-use Endroid\SoccerData\Entity\Team;
 use Endroid\SoccerData\Loader\GameLoaderInterface;
 use Endroid\SoccerData\Loader\TeamLoaderInterface;
+use Endroid\SoccerData\Model\Game;
+use Endroid\SoccerData\Model\Score;
+use Endroid\SoccerData\Model\Team;
 use Endroid\SoccerData\Vi\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
 final class GameLoader implements GameLoaderInterface
 {
     /** @var array<string, string> */
-    private $days = [
+    private array $days = [
         'Za' => 'sat',
         'Zo' => 'Sun',
         'Ma' => 'Mon',
@@ -34,7 +26,7 @@ final class GameLoader implements GameLoaderInterface
     ];
 
     /** @var array<string, string> */
-    private $months = [
+    private array $months = [
         'jan' => 'jan',
         'feb' => 'feb',
         'mrt' => 'mar',
@@ -49,23 +41,16 @@ final class GameLoader implements GameLoaderInterface
         'dec' => 'dec',
     ];
 
-    private $client;
-    private $teamLoader;
-
-    /** @var array<Game> */
-    private $gamesById;
-
-    public function __construct(Client $client, TeamLoaderInterface $teamLoader)
-    {
-        $this->client = $client;
-        $this->teamLoader = $teamLoader;
-        $this->gamesById = [];
+    public function __construct(
+        private Client $client,
+        private TeamLoaderInterface $teamLoader
+    ) {
     }
 
     /** @return array<Game> */
     public function loadByTeam(Team $team): array
     {
-        $contents = $this->client->loadContents($team->getId());
+        $contents = $this->client->loadContents($team->id);
         $crawler = new Crawler($contents);
         $crawler->filter('.c-match-overview')->each(function (Crawler $node) use ($team) {
             $id = $this->client->ensureAbsoluteUrl(strval($node->filter('.c-match-overview__link')->attr('href')));
@@ -73,11 +58,11 @@ final class GameLoader implements GameLoaderInterface
             $dateString = strtr($node->filter('h3')->html(), $this->days + $this->months);
             $timeString = trim($node->filter('.c-fixture__status')->text());
 
-            if (false === strpos($timeString, ':')) {
+            if (!str_contains($timeString, ':')) {
                 $timeString = '00:00';
             }
 
-            $date = \DateTimeImmutable::createFromFormat('D j M H:i', trim($dateString, '.').' '.$timeString, new DateTimeZone('Europe/Amsterdam'));
+            $date = \DateTimeImmutable::createFromFormat('D j M H:i', trim($dateString, '.').' '.$timeString, new \DateTimeZone('Europe/Amsterdam'));
 
             if (!$date instanceof \DateTimeImmutable) {
                 throw new \Exception('Invalid game date');
@@ -95,15 +80,9 @@ final class GameLoader implements GameLoaderInterface
 
             $game = new Game($id, $date, $teamHome, $teamAway, $score);
 
-            $this->addGame($game);
             $team->addGame($game);
         });
 
         return $team->getGames();
-    }
-
-    private function addGame(Game $game): void
-    {
-        $this->gamesById[$game->getId()] = $game;
     }
 }
