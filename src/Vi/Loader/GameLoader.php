@@ -15,7 +15,7 @@ use Symfony\Component\DomCrawler\Crawler;
 final class GameLoader implements GameLoaderInterface
 {
     /** @var array<string, string> */
-    private array $days = [
+    private const DAYS = [
         'Za' => 'sat',
         'Zo' => 'Sun',
         'Ma' => 'Mon',
@@ -26,7 +26,7 @@ final class GameLoader implements GameLoaderInterface
     ];
 
     /** @var array<string, string> */
-    private array $months = [
+    private const MONTHS = [
         'jan' => 'jan',
         'feb' => 'feb',
         'mrt' => 'mar',
@@ -42,8 +42,8 @@ final class GameLoader implements GameLoaderInterface
     ];
 
     public function __construct(
-        private Client $client,
-        private TeamLoaderInterface $teamLoader
+        private readonly Client $client,
+        private readonly TeamLoaderInterface $teamLoader
     ) {
     }
 
@@ -55,7 +55,7 @@ final class GameLoader implements GameLoaderInterface
         $crawler->filter('.c-match-overview')->each(function (Crawler $node) use ($team) {
             $id = $this->client->ensureAbsoluteUrl(strval($node->filter('.c-match-overview__link')->attr('href')));
 
-            $dateString = strtr($node->filter('h3')->html(), $this->days + $this->months);
+            $dateString = strtr($node->filter('h3')->html(), self::DAYS + self::MONTHS);
             $timeString = trim($node->filter('.c-fixture__status')->text());
 
             if (!str_contains($timeString, ':')) {

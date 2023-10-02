@@ -10,8 +10,8 @@ final class Competition
     private array $teamsByName = [];
 
     public function __construct(
-        public string $id,
-        public string $name
+        public readonly string $id,
+        public readonly string $name
     ) {
     }
 

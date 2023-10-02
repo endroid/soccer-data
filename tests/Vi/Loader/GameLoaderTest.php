@@ -11,7 +11,7 @@ use Endroid\SoccerData\Vi\Loader\GameLoader;
 use Endroid\SoccerData\Vi\Loader\TeamLoader;
 use PHPUnit\Framework\TestCase;
 
-class GameLoaderTest extends TestCase
+final class GameLoaderTest extends TestCase
 {
     public function testLoadByTeam(): void
     {

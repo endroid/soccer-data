@@ -7,11 +7,11 @@ namespace Endroid\SoccerData\Model;
 final class Game
 {
     public function __construct(
-        public string $id,
-        public \DateTimeImmutable $date,
-        public Team $teamHome,
-        public Team $teamAway,
-        public Score|null $score
+        public readonly string $id,
+        public readonly \DateTimeImmutable $date,
+        public readonly Team $teamHome,
+        public readonly Team $teamAway,
+        public readonly Score|null $score
     ) {
     }
 
