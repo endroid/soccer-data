@@ -14,8 +14,8 @@
     "require": {
         "php": "^8.1",
         "ext-curl": "*",
-        "symfony/css-selector": "^5.4||^6.0",
-        "symfony/dom-crawler": "^5.4||^6.0"
+        "symfony/css-selector": "^5.4||^6.4||^7.0",
+        "symfony/dom-crawler": "^5.4||^6.4||^7.0"
     },
     "require-dev": {
         "endroid/quality": "dev-master"
