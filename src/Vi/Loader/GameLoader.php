@@ -53,7 +53,12 @@ final class GameLoader implements GameLoaderInterface
         $contents = $this->client->loadContents($team->id);
         $crawler = new Crawler($contents);
         $crawler->filter('.c-match-overview')->each(function (Crawler $node) use ($team) {
-            $id = $this->client->ensureAbsoluteUrl(strval($node->filter('.c-match-overview__link')->attr('href')));
+            $link = $node->filter('.c-match-overview__link');
+            if (0 === $link->count()) {
+                return;
+            }
+
+            $id = $this->client->ensureAbsoluteUrl(strval($link->attr('href')));
 
             $dateString = strtr($node->filter('h3')->html(), self::DAYS + self::MONTHS);
             $timeString = trim($node->filter('.c-fixture__status')->text());
