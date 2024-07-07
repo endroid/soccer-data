@@ -10,7 +10,7 @@ final class Team
     private array $games = [];
 
     public function __construct(
-        public readonly string $id,
+        public readonly string|int $id,
         public readonly string $name
     ) {
     }
